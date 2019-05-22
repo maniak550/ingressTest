@@ -1,0 +1,34 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: whoami
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      name: whoami
+      labels:
+        app: whoami
+        env: prod
+    spec:
+      containers:
+      - name: whoami
+        image: hello-world
+        ports:
+        - containerPort: 8000
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: nvh-ingress
+spec:
+  rules:
+  - host: localhost/whoami
+    http:
+      path: /*
+      - backend:
+          serviceName: service1
+          servicePort: 80
